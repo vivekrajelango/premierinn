@@ -1,0 +1,83 @@
+{
+  "header": {
+    "title": "Request a group booking",
+    "description": "Planning a group event and need 10 or more rooms? Fill out the form below! Once we've received your request, our group booking team will be in touch."
+  },
+  "sections": {
+    "contact": {
+      "title": "Contact details",
+      "subtitle": "Your contact details",
+      "fields": {
+        "title": "Title",
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "mobile": "Mobile number",
+        "email": "Email"
+      }
+    },
+    "booking": {
+      "title": "Booking details",
+      "fields": {
+        "bookerType": {
+          "label": "What type of booker are you?",
+          "options": {
+            "personal": "Personal",
+            "business": "Business",
+            "agent": "Travel Agent",
+            "operator": "Travel Operator"
+          }
+        },
+        "companyName": "Company name",
+        "stayType": {
+          "label": "Is your group staying for Business or Leisure?",
+          "options": {
+            "business": "Business",
+            "leisure": "Leisure"
+          }
+        },
+        "youthGroup": "Please tick this box if you are booking for a school or youth group.",
+        "visitReason": "What is the reason for your group's visit?",
+        "bookingDetails": {
+          "title": "Booking details",
+          "description": "Our team will try to accommodate your group's preferences in terms of hotels and dates. If that's not possible, we'll do everything we can to offer the best alternatives.",
+          "hotelName": "Hotel name",
+          "checkIn": "Check-in date",
+          "checkOut": "Check-out date"
+        },
+        "packageType": {
+          "title": "Package type",
+          "description": "Subject to availability. Room only not available for group bookings.",
+          "options": {
+            "breakfast": "Premier Inn Breakfast",
+            "mealdeal": "Meal deal (dinner, drink and breakfast)"
+          }
+        }
+      }
+    },
+    "rooms": {
+      "title": "Room requirements",
+      "fields": {
+        "rooms": {
+          "title": "Rooms",
+          "description": "Select the maximum number of rooms required by room type and occupancy.",
+          "seeTypes": "See room types"
+        },
+        "withChildren": "Travelling/staying with children (2-15 years).",
+        "accessibleRoom": "Accessible room is needed.",
+        "additionalInfo": {
+          "title": "Additional information (optional)",
+          "description": "Select the maximum number of rooms required by room type and occupancy.",
+          "nightlyRequirements": "If you do not require the same number of rooms on each night of your stay, please state below the number and type of rooms required each night.",
+          "placeholder": "Any special requirements or additional information"
+        }
+      }
+    }
+  },
+  "buttons": {
+    "continue": "Continue",
+    "submit": "Submit"
+  },
+  "validation": {
+    "required": "This field is required"
+  }
+}

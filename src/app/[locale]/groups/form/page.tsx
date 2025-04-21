@@ -3,12 +3,14 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { useForm, FormProvider } from "react-hook-form";
-import { FormInput } from '@/app/components/FormInput';
-import { FormSelect } from '@/app/components/FormSelect';
-import { FormRadioGroup } from '@/app/components/FormRadioGroup';
-import { FormCheckbox } from '@/app/components/FormCheckbox';
-import { FormDate } from '@/app/components/FormDate';
-import { RoomSelection } from '@/app/components/RoomSelection';
+import { useTranslations } from 'next-intl';
+import { FormInput } from '@/app/[locale]/components/FormInput';
+import { FormSelect } from '@/app/[locale]/components/FormSelect';
+import { FormRadioGroup } from '@/app/[locale]/components/FormRadioGroup';
+import { FormCheckbox } from '@/app/[locale]/components/FormCheckbox';
+import { FormDate } from '@/app/[locale]/components/FormDate';
+import { RoomSelection } from '@/app/[locale]/components/RoomSelection';
+import { LanguageSelector } from '@/app/[locale]/components/LanguageSelector';
 
 interface ContactDetails {
   title: string;
@@ -33,6 +35,7 @@ type FieldName = "title" | "firstName" | "lastName" | "mobile" | "email" | "book
 type bookingType = "business" | "personal" | "agent" | "operator";
 
 export default function GroupBookingForm() {
+  const t = useTranslations();
   const [openSection, setOpenSection] = useState<string>('contact');
   const sectionOrder = ['contact', 'booking', 'rooms'];
 
@@ -86,7 +89,7 @@ export default function GroupBookingForm() {
   return (
     <div className="min-h-screen bg-white">
       <header className="border-b border-gray-200 py-4">
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-4 flex justify-between items-center">
           <Image 
             src="https://www.premierinn.com/content/dam/pi/websites/desktop/icons/brand/pi-logo-rest-easy.svg" 
             alt="Premier Inn" 
@@ -94,20 +97,19 @@ export default function GroupBookingForm() {
             height={40}
             priority
           />
+          <LanguageSelector />
         </div>
       </header>
       
       <main className="container mx-auto px-4 py-8 w-[500px]">
-        <h1 className="text-3xl font-bold text-[#4F2D7F] mb-4">Request a group booking</h1>
-        <p className="text-gray-600 mb-8">
-          Planning a group event and need 10 or more rooms? Fill out the form below! Once we've received your request, our group booking team will be in touch.
-        </p>
+        <h1 className="text-3xl font-bold text-[#4F2D7F] mb-4">{t('header.title')}</h1>
+        <p className="text-gray-600 mb-8">{t('header.description')}</p>
 
         <FormProvider {...methods}>
         <form className="max-w-2xl" onSubmit={handleSubmit(onSubmit)}>
           <div className="border overflow-hidden mb-0">
             <button type="button" className="w-full flex items-center justify-between p-4 bg-gray-50 hover:bg-gray-100 transition-colors" onClick={() => setOpenSection(openSection === 'contact' ? '' : 'contact')}>
-              <span className="text-lg font-semibold text-gray-500">Contact details</span>
+              <span className="text-lg font-semibold text-gray-500">{t('sections.contact.title')}</span>
               <svg 
                 className={`w-5 h-5 text-gray-500 transform transition-transform ${openSection === 'contact' ? 'rotate-180' : ''}`}
                 fill="none" 
@@ -119,10 +121,10 @@ export default function GroupBookingForm() {
             </button>
             <div className={`transition-all duration-300 ${openSection === 'contact' ? 'max-h-[auto] opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
               <div className="p-5">
-                <h3 className="text-lg font-semibold mb-4">Your contact details</h3>
+                <h3 className="text-lg font-semibold mb-4">{t('sections.contact.subtitle')}</h3>
                 <div className="space-y-2">
                   <FormSelect
-                    label="Title"
+                    label={t('sections.contact.fields.title')}
                     name="title"
                     required
                     options={[
@@ -137,28 +139,28 @@ export default function GroupBookingForm() {
                   />
 
                   <FormInput
-                    label="First Name"
+                    label={t('sections.contact.fields.firstName')}
                     name="firstName"
                     required
                     register={register}
                     error={errors.firstName}
                   />
                   <FormInput
-                    label="Last Name"
+                    label={t('sections.contact.fields.lastName')}
                     name="lastName"
                     required
                     register={register}
                     error={errors.lastName}
                   />
                   <FormInput
-                    label="Mobile number"
+                    label={t('sections.contact.fields.mobile')}
                     name="mobile"
                     required
                     register={register}
                     error={errors.mobile}
                   />
                   <FormInput
-                    label="Email"
+                    label={t('sections.contact.fields.email')}
                     name="email"
                     required
                     register={register}
@@ -166,7 +168,7 @@ export default function GroupBookingForm() {
                   />
                 </div>
                 <div className="flex mt-4">
-                  <button type="button" className="w-full bg-[#00798e] text-white py-3 rounded" onClick={() => handleContinue('contact')}>Continue</button>
+                  <button type="button" className="w-full bg-[#00798e] text-white py-3 rounded" onClick={() => handleContinue('contact')}>{t('buttons.continue')}</button>
                 </div>
               </div>
             </div>
@@ -175,7 +177,7 @@ export default function GroupBookingForm() {
           {/* Booking Details */}
           <div className="border overflow-hidden mb-0">
             <button type="button" className="w-full flex items-center justify-between p-4 bg-gray-50 hover:bg-gray-100 transition-colors" onClick={() => setOpenSection(openSection === 'booking' ? '' : 'booking')}>
-              <span className="text-lg font-semibold text-gray-500">Booking details</span>
+              <span className="text-lg font-semibold text-gray-500">{t('sections.booking.title')}</span>
               <svg 
                 className={`w-5 h-5 text-gray-500 transform transition-transform ${openSection === 'booking' ? 'rotate-180' : ''}`}
                 fill="none" 
@@ -190,32 +192,32 @@ export default function GroupBookingForm() {
                 {/* <h3 className="text-lg font-semibold mb-4">Your booking details</h3> */}
                 <div className="space-y-4">
                   <FormRadioGroup
-                    label="What type of booker are you?"
+                    label={t('sections.booking.fields.bookerType.label')}
                     name="bookingType"
                     required
                     options={[
-                      { value: "personal", label: "Personal" },
-                      { value: "business", label: "Business" },
-                      { value: "agent", label: "Travel Agent" },
-                      { value: "operator", label: "Travel Operator" },
+                      { value: "personal", label: `${t('sections.booking.fields.bookerType.options.personal')}` },
+                      { value: "business", label: `${t('sections.booking.fields.bookerType.options.business')}` },
+                      { value: "agent", label: `${t('sections.booking.fields.bookerType.options.agent')}` },
+                      { value: "operator", label: `${t('sections.booking.fields.bookerType.options.operator')}` },
                     ]}
                     register={register}
                     error={errors.bookingType}
                   />
                   {bookingType && bookingType !=='personal' && (
                     <div className='mt-5'>
-                      <input type="text" {...register('companyName')} placeholder="Company name" className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#4F2D7F] focus:border-transparent" />
+                      <input type="text" {...register('companyName')} placeholder={t('sections.booking.fields.companyName')} className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#4F2D7F] focus:border-transparent" />
                     </div>
                   )}
 
                   <div className='!mt-10'>
                     <FormRadioGroup
-                      label="Is your group staying for Business or Leisure?"
+                      label={t('sections.booking.fields.stayType.label')}
                       name="stayType"
                       required
                       options={[
-                        { value: "business", label: "Business" },
-                        { value: "leisure", label: "Leisure" },
+                        { value: "business", label: `${t('sections.booking.fields.stayType.options.business')}` },
+                        { value: "leisure", label: `${t('sections.booking.fields.stayType.options.leisure')}` },
                       ]}
                       register={register}
                       error={errors.stayType}
@@ -223,14 +225,14 @@ export default function GroupBookingForm() {
                   </div>
                   
                   <FormCheckbox
-                    label="Please tick this box if you are booking for a school or youth group."
+                    label={t('sections.booking.fields.youthGroup')}
                     name="hasYouth"
                     register={register}
                   />
 
                   <div className='!mt-10'>
                     <FormSelect
-                      label="What is the reason for your group's visit?"
+                      label={t('sections.booking.fields.visitReason')}
                       name="reason"
                       required
                       options={[
@@ -246,16 +248,17 @@ export default function GroupBookingForm() {
                   </div>
 
                   <div className='!mt-10'>
-                    <label className="block text-lg font-semibold text-gray-700 mb-1">Booking details </label>
-                    <p className="text-sm leading-5 text-gray-500 mb-2">Our team will try to accommodate your group’s preferences in terms of hotels and dates. If that’s not possible, we’ll do everything we can to offer the best alternatives.</p>
+                    <label className="block text-lg font-semibold text-gray-700 mb-1">{t('sections.booking.fields.bookingDetails.title')} </label>
+                    <p className="text-sm leading-5 text-gray-500 mb-2">{t('sections.booking.fields.bookingDetails.description')}</p>
                     <FormInput
                       label=""
+                      placeholder={t('sections.booking.fields.bookingDetails.hotelName')}
                       name="hotelName"
                       register={register}
                       error={errors.hotelName}
                     />
                     <FormDate
-                      label="Check-in date"
+                      label={t('sections.booking.fields.bookingDetails.checkIn')}
                       name="checkIn"
                       className='mt-4'
                       required
@@ -264,7 +267,7 @@ export default function GroupBookingForm() {
                       minDate={new Date().toISOString().split('T')[0]} // Sets minimum date to today
                     />
                     <FormDate
-                      label="Check-out date"
+                      label={t('sections.booking.fields.bookingDetails.checkOut')}
                       name="checkOut"
                       className='mt-4'
                       required
@@ -276,14 +279,14 @@ export default function GroupBookingForm() {
                   
 
                   <div className='!mt-10'>
-                    <label className="block text-lg font-semibold text-gray-700 mb-1">Package type </label>
-                    <p className="text-sm leading-5 text-gray-500 mb-4">Subject to availability. Room only not available for group bookings.</p>
+                    <label className="block text-lg font-semibold text-gray-700 mb-1">{t('sections.booking.fields.packageType.title')}</label>
+                    <p className="text-sm leading-5 text-gray-500 mb-4">{t('sections.booking.fields.packageType.description')}</p>
                     <FormRadioGroup
                       label=""
                       name="packageType"
                       options={[
-                        { value: "breakfast", label: "Premier Inn Breakfast" },
-                        { value: "mealdeal", label: "Meal deal (dinner, drink and breakfast)" },
+                        { value: "breakfast", label: `${t('sections.booking.fields.packageType.options.breakfast')}` },
+                        { value: "mealdeal", label: `${t('sections.booking.fields.packageType.options.mealdeal')}` },
                       ]}
                       register={register}
                       error={errors.packageType}
@@ -292,7 +295,7 @@ export default function GroupBookingForm() {
 
                 </div>
                 <div className="flex mt-4">
-                  <button type="button" className="w-full bg-[#00798e] text-white px-6 py-3 rounded" onClick={() => handleContinue('booking')}>Continue</button>
+                  <button type="button" className="w-full bg-[#00798e] text-white px-6 py-3 rounded" onClick={() => handleContinue('booking')}>{t('buttons.continue')}</button>
                 </div>
               </div>
             </div>
@@ -302,7 +305,7 @@ export default function GroupBookingForm() {
           {/* Room Requirements Section */}
           <div className="border overflow-hidden mb-0">
             <button type="button" className="w-full flex items-center justify-between p-4 bg-gray-50 hover:bg-gray-100 transition-colors" onClick={() => setOpenSection(openSection === 'rooms' ? '' : 'rooms')}>
-              <span className="text-lg font-semibold text-gray-500">Room requirements</span>
+              <span className="text-lg font-semibold text-gray-500">{t('sections.rooms.title')}</span>
               <svg 
                 className={`w-5 h-5 text-gray-500 transform transition-transform ${openSection === 'rooms' ? 'rotate-180' : ''}`}
                 fill="none" 
@@ -316,19 +319,19 @@ export default function GroupBookingForm() {
               <div className="p-4">
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-lg font-semibold text-gray-700 mb-1">Rooms</label>
-                    <p className="text-sm leading-5 text-gray-500">Select the maximum number of rooms required by room type and occupancy.</p>
-                    <p className='my-2 underline'>See room types</p>
+                    <label className="block text-lg font-semibold text-gray-700 mb-1">{t('sections.rooms.fields.rooms.title')}</label>
+                    <p className="text-sm leading-5 text-gray-500">{t('sections.rooms.fields.rooms.description')}</p>
+                    <p className='my-2 underline'>{t('sections.rooms.fields.rooms.seeTypes')}</p>
                   </div>
                   
                   <FormCheckbox
-                    label="Travelling/staying with children (2-15 years)."
+                    label={t('sections.rooms.fields.withChildren')}
                     name="hasChildren"
                     register={register}
                   />
 
                   <FormCheckbox
-                    label="Accessible room is needed."
+                    label={t('sections.rooms.fields.accessibleRoom')}
                     name="hasAccessibleRoom"
                     register={register}
                   />
@@ -340,10 +343,10 @@ export default function GroupBookingForm() {
                   />
 
                   <div className='!mt-10'>
-                    <label className="block text-lg font-medium text-gray-700 mb-1">Additional information (optional)</label>
-                    <p className="text-sm leading-5 text-gray-500">Select the maximum number of rooms required by room type and occupancy.</p>
-                    <p className="text-sm mt-4 leading-5 text-gray-500">If you do not require the same number of rooms on each night of your stay, please state below the number and type of rooms required each night.</p>
-                    <textarea {...register('notes')} rows={4} placeholder="Any special requirements or additional information" className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none mt-4 focus:ring-2 focus:ring-[#4F2D7F] focus:border-transparent" />
+                    <label className="block text-lg font-medium text-gray-700 mb-1">{t('sections.rooms.fields.additionalInfo.title')}</label>
+                    <p className="text-sm leading-5 text-gray-500">{t('sections.rooms.fields.additionalInfo.description')}</p>
+                    <p className="text-sm mt-4 leading-5 text-gray-500">{t('sections.rooms.fields.additionalInfo.nightlyRequirements')}</p>
+                    <textarea {...register('notes')} rows={4} placeholder={t('sections.rooms.fields.additionalInfo.placeholder')} className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none mt-4 focus:ring-2 focus:ring-[#4F2D7F] focus:border-transparent" />
                   </div>
                 </div>
                 <div className="flex justify-end mt-4">

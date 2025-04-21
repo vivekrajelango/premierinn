@@ -1,0 +1,83 @@
+{
+  "header": {
+    "title": "Gruppenbuchung anfragen",
+    "description": "Planen Sie eine Gruppenveranstaltung und benötigen 10 oder mehr Zimmer? Füllen Sie das untenstehende Formular aus! Sobald wir Ihre Anfrage erhalten haben, wird sich unser Gruppenbuchungsteam mit Ihnen in Verbindung setzen."
+  },
+  "sections": {
+    "contact": {
+      "title": "Kontaktdaten",
+      "subtitle": "Ihre Kontaktdaten",
+      "fields": {
+        "title": "Anrede",
+        "firstName": "Vorname",
+        "lastName": "Nachname",
+        "mobile": "Mobilnummer",
+        "email": "E-Mail"
+      }
+    },
+    "booking": {
+      "title": "Buchungsdetails",
+      "fields": {
+        "bookerType": {
+          "label": "Welche Art von Bucher sind Sie?",
+          "options": {
+            "personal": "Privat",
+            "business": "Geschäftlich",
+            "agent": "Reisebüro",
+            "operator": "Reiseveranstalter"
+          }
+        },
+        "companyName": "Firmenname",
+        "stayType": {
+          "label": "Reist Ihre Gruppe geschäftlich oder privat?",
+          "options": {
+            "business": "Geschäftlich",
+            "leisure": "Privat"
+          }
+        },
+        "youthGroup": "Bitte markieren Sie dieses Kästchen, wenn Sie für eine Schul- oder Jugendgruppe buchen.",
+        "visitReason": "Was ist der Grund für den Besuch Ihrer Gruppe?",
+        "bookingDetails": {
+          "title": "Buchungsdetails",
+          "description": "Unser Team wird versuchen, die Präferenzen Ihrer Gruppe in Bezug auf Hotels und Termine zu berücksichtigen. Wenn das nicht möglich ist, werden wir alles tun, um die besten Alternativen anzubieten.",
+          "hotelName": "Hotelname",
+          "checkIn": "Anreisedatum",
+          "checkOut": "Abreisedatum"
+        },
+        "packageType": {
+          "title": "Pakettyp",
+          "description": "Vorbehaltlich der Verfügbarkeit. Nur Zimmer sind für Gruppenbuchungen nicht verfügbar.",
+          "options": {
+            "breakfast": "Premier Inn Frühstück",
+            "mealdeal": "Mahlzeitenpaket (Abendessen, Getränk und Frühstück)"
+          }
+        }
+      }
+    },
+    "rooms": {
+      "title": "Zimmeranforderungen",
+      "fields": {
+        "rooms": {
+          "title": "Zimmer",
+          "description": "Wählen Sie die maximale Anzahl der benötigten Zimmer nach Zimmertyp und Belegung.",
+          "seeTypes": "Zimmertypen ansehen"
+        },
+        "withChildren": "Reisen/Übernachtung mit Kindern (2-15 Jahre).",
+        "accessibleRoom": "Barrierefreies Zimmer wird benötigt.",
+        "additionalInfo": {
+          "title": "Zusätzliche Informationen (optional)",
+          "description": "Wählen Sie die maximale Anzahl der benötigten Zimmer nach Zimmertyp und Belegung.",
+          "nightlyRequirements": "Wenn Sie nicht die gleiche Anzahl von Zimmern für jede Nacht Ihres Aufenthalts benötigen, geben Sie bitte unten die Anzahl und Art der benötigten Zimmer für jede Nacht an.",
+          "placeholder": "Besondere Anforderungen oder zusätzliche Informationen"
+        }
+      }
+    }
+  },
+  "buttons": {
+    "continue": "Weiter",
+    "submit": "Absenden"
+  },
+  "validation": {
+    "required": "Dieses Feld ist erforderlich"
+  }
+}
