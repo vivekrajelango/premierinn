@@ -1,6 +1,5 @@
 import { thunk } from 'redux-thunk';
-import { Tuple, configureStore } from '@reduxjs/toolkit';
-import { Action, Middleware, applyMiddleware, createStore } from 'redux';
+import { applyMiddleware, createStore } from 'redux';
 import { rootReducer } from '../reducers/rootReducer';
 import logger from 'redux-logger';
 import { composeWithDevTools } from 'redux-devtools-extension';

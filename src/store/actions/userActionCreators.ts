@@ -1,5 +1,4 @@
-import _ from 'lodash';
-import { createAsyncAction, createAction } from 'redux-promise-middleware-actions';
+import { createAsyncAction } from 'redux-promise-middleware-actions';
 import { userDetailsTypes } from '@/types/userDetails/userDetails';
 import { getData } from '@/utils/apiMethods';
 

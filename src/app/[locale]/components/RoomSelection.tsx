@@ -7,7 +7,7 @@ interface RoomSelectionProps {
     watch: any;
 }
 
-export const RoomSelection = ({ register, setValue, watch }: RoomSelectionProps) => {
+export const RoomSelection = ({ setValue, watch }: RoomSelectionProps) => {
     const singleRooms = watch('singleRooms') || 0;
     const doubleRooms = watch('doubleRooms') || 0;
     const twinRooms = watch('twinRooms') || 0;

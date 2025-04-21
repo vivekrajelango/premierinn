@@ -1,5 +1,4 @@
 import { userDetailsTypes as types } from '@/types/userDetails/userDetails';
-import _ from 'lodash';
 
 export interface UserAppState {
   getReasonsPending: boolean;

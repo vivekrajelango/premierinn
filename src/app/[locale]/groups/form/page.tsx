@@ -1,6 +1,6 @@
 'use client';
 
-import { use, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useForm, FormProvider } from "react-hook-form";
 import { useSelector, useDispatch } from "react-redux";
@@ -14,11 +14,9 @@ import { RoomSelection } from '@/app/[locale]/components/RoomSelection';
 import { LanguageSelector } from '@/app/[locale]/components/LanguageSelector';
 import { getMenuListfromApi } from '@/store/actions';
 import { routePath } from '@/constants/api';
-import { get } from 'lodash';
 
 type FieldName = "title" | "firstName" | "lastName" | "mobile" | "email" | "bookingType" | "stayType" | "hasYouth" | "reason" | "hotelName" | "companyName" | "checkIn" | "checkOut" | "packageType" | "totalRooms" | "hasChildren" | "hasAccessibleRoom" | "notes";
 
-type bookingType = "business" | "personal" | "agent" | "operator";
 
 export default function GroupBookingForm() {
   const t = useTranslations();
@@ -57,7 +55,6 @@ export default function GroupBookingForm() {
   const { register, handleSubmit, trigger, watch, formState: { errors } } = methods;
 
   const bookingType = watch('bookingType');
-  const totalRooms = watch('singleRooms') + watch('doubleRooms') + watch('twinRooms');
 
   const handleContinue = async (section: string) => {
     let fields: FieldName[] = [];
@@ -78,8 +75,11 @@ export default function GroupBookingForm() {
 
   useEffect(()=>{
     dispatch(getMenuListfromApi(routePath.GET_REASONS, ""));
-  },[]);
+  },[dispatch]);
 
+  if (getReasonsPending) {
+    return <div className="flex justify-center items-center h-screen">Loading...</div>;
+  }
   return (
     <div className="min-h-screen bg-white">
       <header className="border-b border-gray-200 py-4">
