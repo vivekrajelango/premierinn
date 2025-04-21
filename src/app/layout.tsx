@@ -26,11 +26,6 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <div className="min-h-screen bg-white text-gray-900 transition-colors">
-          <header className="border-b border-gray-200 py-4">
-            <div className="container mx-auto px-4 flex justify-between items-center">
-              {/* Theme toggle removed */}
-            </div>
-          </header>
           {children}
         </div>
       </body>

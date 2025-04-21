@@ -3,6 +3,12 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { useForm, FormProvider } from "react-hook-form";
+import { FormInput } from '@/app/components/FormInput';
+import { FormSelect } from '@/app/components/FormSelect';
+import { FormRadioGroup } from '@/app/components/FormRadioGroup';
+import { FormCheckbox } from '@/app/components/FormCheckbox';
+import { FormDate } from '@/app/components/FormDate';
+import { RoomSelection } from '@/app/components/RoomSelection';
 
 interface ContactDetails {
   title: string;
@@ -47,7 +53,10 @@ export default function GroupBookingForm() {
       checkIn: '',
       checkOut: '',
       packageType: 'breakfast',
-      totalRooms: 10,
+      singleRooms: 0,
+      doubleRooms: 0,
+      twinRooms: 0,
+      totalRooms: 0,
       hasChildren: false,
       hasAccessibleRoom: false,
       notes: ''
@@ -79,7 +88,7 @@ export default function GroupBookingForm() {
       <header className="border-b border-gray-200 py-4">
         <div className="container mx-auto px-4">
           <Image 
-            src="/premier-inn-logo.svg" 
+            src="https://www.premierinn.com/content/dam/pi/websites/desktop/icons/brand/pi-logo-rest-easy.svg" 
             alt="Premier Inn" 
             width={120} 
             height={40}
@@ -112,38 +121,49 @@ export default function GroupBookingForm() {
               <div className="p-5">
                 <h3 className="text-lg font-semibold mb-4">Your contact details</h3>
                 <div className="space-y-2">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Title <span className="text-red-500">*</span></label>
-                    <select {...register('title', { required: 'Title is required' })} className={`${errors.title ?'!border-red-500 ' : 'border-gray-300'} border w-48 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-[#4F2D7F] focus:border-transparent`}>
-                      <option value="">Select...</option>
-                      <option value="mr">Mr</option>
-                      <option value="mrs">Mrs</option>
-                      <option value="miss">Miss</option>
-                      <option value="ms">Ms</option>
-                      <option value="dr">Dr</option>
-                    </select>
-                    {errors.title && <span className="text-red-500 text-xs block mt-1">{errors.title.message}</span>}
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">First Name <span className="text-red-500">*</span></label>
-                    <input type="text" {...register('firstName', { required: 'First name is required' })} className={`${errors.firstName ? 'border-red-500 ' : 'border-gray-300'} w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#4F2D7F] focus:border-transparent`} />
-                    {errors.firstName && <span className="text-red-500 text-xs block mt-1">{errors.firstName.message}</span>}
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Last Name <span className="text-red-500">*</span></label>
-                    <input type="text" {...register('lastName', { required: 'Last name is required' })} className={`${errors.lastName ? 'border-red-500 ' : 'border-gray-300'} w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#4F2D7F] focus:border-transparent`} />
-                    {errors.lastName && <span className="text-red-500 text-xs block mt-1">{errors.lastName.message}</span>}
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Mobile number<span className="text-red-500">*</span></label>
-                    <input type="text" {...register('mobile', { required: 'Mobile number is required' })} className={`${errors.mobile ? 'border-red-500 ' : 'border-gray-300'} w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#4F2D7F] focus:border-transparent`} />
-                    {errors.mobile && <span className="text-red-500 text-xs block mt-1">{errors.mobile.message}</span>}
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Email<span className="text-red-500">*</span></label>
-                    <input type="text" {...register('email', { required: 'Email is required' })} className={`${errors.email ? 'border-red-500 ' : 'border-gray-300'} w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#4F2D7F] focus:border-transparent`} />
-                    {errors.email && <span className="text-red-500 text-xs block mt-1">{errors.email.message}</span>}
-                  </div>
+                  <FormSelect
+                    label="Title"
+                    name="title"
+                    required
+                    options={[
+                      { value: "mr", label: "Mr" },
+                      { value: "mrs", label: "Mrs" },
+                      { value: "miss", label: "Miss" },
+                      { value: "ms", label: "Ms" },
+                      { value: "dr", label: "Dr" },
+                    ]}
+                    register={register}
+                    error={errors.title}
+                  />
+
+                  <FormInput
+                    label="First Name"
+                    name="firstName"
+                    required
+                    register={register}
+                    error={errors.firstName}
+                  />
+                  <FormInput
+                    label="Last Name"
+                    name="lastName"
+                    required
+                    register={register}
+                    error={errors.lastName}
+                  />
+                  <FormInput
+                    label="Mobile number"
+                    name="mobile"
+                    required
+                    register={register}
+                    error={errors.mobile}
+                  />
+                  <FormInput
+                    label="Email"
+                    name="email"
+                    required
+                    register={register}
+                    error={errors.email}
+                  />
                 </div>
                 <div className="flex mt-4">
                   <button type="button" className="w-full bg-[#00798e] text-white py-3 rounded" onClick={() => handleContinue('contact')}>Continue</button>
@@ -169,151 +189,110 @@ export default function GroupBookingForm() {
               <div className="p-4">
                 {/* <h3 className="text-lg font-semibold mb-4">Your booking details</h3> */}
                 <div className="space-y-4">
-                  <div>
-                    <label className="block text-lg font-semibold text-gray-700 mb-1">What type of booker are you? <span className="text-red-500">*</span></label>
-                    <div className="flex border border-gray-300 px-3 py-4 items-center space-x-3">
-                    <input 
-                      type="radio"  
-                      value="personal"
-                      {...register('bookingType', {
-                        required: 'Please select a type of booker before proceeding.'
-                      })} 
-                       /> 
-                      <span>Personal</span>
-                      </div>
-
-                      <div className='flex border border-gray-300 px-3 py-4 items-center space-x-3'>
-                        <input 
-                          type="radio"  
-                          value="business"
-                          {...register('bookingType', {
-                            required: 'Please select a type of booker before proceeding.'
-                          })} 
-                          />
-                          <span> Business</span>
-                      </div>
-
-                      <div className='flex border border-gray-300 px-3 py-4 items-center space-x-3'>
-                        <input 
-                          type="radio"  
-                          value="agent"
-                          {...register('bookingType', {
-                            required: 'Please select a type of booker before proceeding.'
-                          })} 
-                          />
-                          <span>Travel Agent</span>
-                      </div>
-
-                      <div className='flex border border-gray-300 px-3 py-4 items-center space-x-3'>
-                        <input 
-                          type="radio"  
-                          value="operator"
-                          {...register('bookingType', {
-                            required: 'Please select a type of booker before proceeding.'
-                          })} 
-                          />
-                          <span>Travel Operator</span>
-                      </div>
-                    {errors.bookingType && <span className="text-red-500 text-xs block mt-1">{errors.bookingType.message}</span>}
-
-                    {bookingType !=='personal' && (
-                      <div className='mt-5'>
-                        <input type="text" {...register('companyName')} placeholder="Company name" className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#4F2D7F] focus:border-transparent" />
-                      </div>
-                      )}
-                  </div>
+                  <FormRadioGroup
+                    label="What type of booker are you?"
+                    name="bookingType"
+                    required
+                    options={[
+                      { value: "personal", label: "Personal" },
+                      { value: "business", label: "Business" },
+                      { value: "agent", label: "Travel Agent" },
+                      { value: "operator", label: "Travel Operator" },
+                    ]}
+                    register={register}
+                    error={errors.bookingType}
+                  />
+                  {bookingType && bookingType !=='personal' && (
+                    <div className='mt-5'>
+                      <input type="text" {...register('companyName')} placeholder="Company name" className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#4F2D7F] focus:border-transparent" />
+                    </div>
+                  )}
 
                   <div className='!mt-10'>
-                    <label className="block text-lg font-semibold text-gray-700 mb-1">Is your group staying for Business or Leisure? <span className="text-red-500">*</span></label>
-                    <div className="flex border border-gray-300 px-3 py-4 items-center space-x-3">
-                    <input 
-                      type="radio"  
-                      value="business"
-                      {...register('stayType', {
-                        required: 'Please select the nature of your stay'
-                      })} 
-                       /> 
-                      <span>Business</span>
-                      </div>
-
-                      <div className='flex border border-gray-300 px-3 py-4 items-center space-x-3'>
-                        <input 
-                          type="radio"  
-                          value="leisure"
-                          {...register('stayType', {
-                            required: 'Please select the nature of your stay'
-                          })} 
-                          />
-                          <span>Leisure</span>
-                      </div>
-                    {errors.stayType && <span className="text-red-500 text-xs block mt-1">{errors.stayType.message}</span>}
+                    <FormRadioGroup
+                      label="Is your group staying for Business or Leisure?"
+                      name="stayType"
+                      required
+                      options={[
+                        { value: "business", label: "Business" },
+                        { value: "leisure", label: "Leisure" },
+                      ]}
+                      register={register}
+                      error={errors.stayType}
+                    />
                   </div>
                   
-                  <div>
-                    <label className="flex flex-row items-start space-x-3 text-sm font-medium text-gray-700">
-                      <input type="checkbox" {...register('hasYouth')} className="rounded border-gray-300 text-[#4F2D7F] focus:ring-[#4F2D7F] mt-1" />
-                      <span>Please tick this box if you are booking for a school or youth group.</span>
-                    </label>
-                  </div>
+                  <FormCheckbox
+                    label="Please tick this box if you are booking for a school or youth group."
+                    name="hasYouth"
+                    register={register}
+                  />
 
                   <div className='!mt-10'>
-                    <label className="block text-lg font-semibold text-gray-700 mb-1">What is the reason for your group's visit?  <span className="text-red-500">*</span></label>
-                    <select {...register('reason', { required: 'Please select a reason before proceeding.' })} className={`${errors.reason ?'!border-red-500 ' : 'border-gray-300'} border w-full rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-[#4F2D7F] focus:border-transparent`}>
-                      <option value="">Select a reason</option>
-                      <option value="mr">Mr</option>
-                      <option value="mrs">Mrs</option>
-                      <option value="miss">Miss</option>
-                      <option value="ms">Ms</option>
-                      <option value="dr">Dr</option>
-                    </select>
-                    {errors.reason && <span className="text-red-500 text-xs block mt-1">{errors.reason.message}</span>}
+                    <FormSelect
+                      label="What is the reason for your group's visit?"
+                      name="reason"
+                      required
+                      options={[
+                        { value: "mr", label: "Mr" },
+                        { value: "mrs", label: "Mrs" },
+                        { value: "miss", label: "Miss" },
+                        { value: "ms", label: "Ms" },
+                        { value: "dr", label: "Dr" },
+                      ]}
+                      register={register}
+                      error={errors.reason}
+                    />
                   </div>
 
                   <div className='!mt-10'>
                     <label className="block text-lg font-semibold text-gray-700 mb-1">Booking details </label>
-                    <p className="text-sm leading-5 text-gray-500">Our team will try to accommodate your group’s preferences in terms of hotels and dates. If that’s not possible, we’ll do everything we can to offer the best alternatives.</p>
-
-                    <input type="text" {...register('hotelName', { required: 'Please select the hotel you would like to make a booking.' })} placeholder="Enter a hotel" className="w-full mt-3 border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#4F2D7F] focus:border-transparent" />
-                    {errors.hotelName && <span className="text-red-500 text-xs block mt-1">{errors.hotelName.message}</span>}
+                    <p className="text-sm leading-5 text-gray-500 mb-2">Our team will try to accommodate your group’s preferences in terms of hotels and dates. If that’s not possible, we’ll do everything we can to offer the best alternatives.</p>
+                    <FormInput
+                      label=""
+                      name="hotelName"
+                      register={register}
+                      error={errors.hotelName}
+                    />
+                    <FormDate
+                      label="Check-in date"
+                      name="checkIn"
+                      className='mt-4'
+                      required
+                      register={register}
+                      error={errors.checkIn}
+                      minDate={new Date().toISOString().split('T')[0]} // Sets minimum date to today
+                    />
+                    <FormDate
+                      label="Check-out date"
+                      name="checkOut"
+                      className='mt-4'
+                      required
+                      register={register}
+                      error={errors.checkOut}
+                      minDate={watch('checkIn')} // Makes check-out date dependent on check-in date
+                    />
                   </div>
                   
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Check-in date <span className="text-red-500">*</span></label>
-                    <input type="date" {...register('checkIn', { required: 'Check-in date is required' })} className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#4F2D7F] focus:border-transparent" />
-                    {errors.checkIn && <span className="text-red-500 text-xs block mt-1">{errors.checkIn.message}</span>}
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Check-out date <span className="text-red-500">*</span></label>
-                    <input type="date" {...register('checkOut', { required: 'Check-out date is required' })} className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#4F2D7F] focus:border-transparent" />
-                    {errors.checkOut && <span className="text-red-500 text-xs block mt-1">{errors.checkOut.message}</span>}
-                  </div>
 
                   <div className='!mt-10'>
-                    <label className="block text-lg font-semibold text-gray-700 mb-1">Package type <span className="text-red-500">*</span></label>
-                    <p className="text-sm leading-5 text-gray-500">Subject to availability. Room only not available for group bookings.</p>
-                    
-                    <div className="flex border border-gray-300 mt-3 px-3 py-4 items-center space-x-3">
-                    <input 
-                      type="radio"  
-                      value="breakfast"
-                      {...register('packageType')} 
-                       /> 
-                      <span>Premier Inn Breakfast</span>
-                      </div>
-
-                      <div className='flex border border-gray-300 px-3 py-4 items-center space-x-3'>
-                        <input 
-                          type="radio"  
-                          value="mealdeal"
-                          {...register('packageType',)} 
-                          />
-                          <span>Meal deal (dinner, drink and breakfast)</span>
-                      </div>
+                    <label className="block text-lg font-semibold text-gray-700 mb-1">Package type </label>
+                    <p className="text-sm leading-5 text-gray-500 mb-4">Subject to availability. Room only not available for group bookings.</p>
+                    <FormRadioGroup
+                      label=""
+                      name="packageType"
+                      options={[
+                        { value: "breakfast", label: "Premier Inn Breakfast" },
+                        { value: "mealdeal", label: "Meal deal (dinner, drink and breakfast)" },
+                      ]}
+                      register={register}
+                      error={errors.packageType}
+                    />
                   </div>
 
                 </div>
                 <div className="flex mt-4">
-                  <button type="button" className="w-full bg-[#00798e] text-white px-6 py-2 rounded" onClick={() => handleContinue('booking')}>Continue</button>
+                  <button type="button" className="w-full bg-[#00798e] text-white px-6 py-3 rounded" onClick={() => handleContinue('booking')}>Continue</button>
                 </div>
               </div>
             </div>
@@ -341,25 +320,24 @@ export default function GroupBookingForm() {
                     <p className="text-sm leading-5 text-gray-500">Select the maximum number of rooms required by room type and occupancy.</p>
                     <p className='my-2 underline'>See room types</p>
                   </div>
+                  
+                  <FormCheckbox
+                    label="Travelling/staying with children (2-15 years)."
+                    name="hasChildren"
+                    register={register}
+                  />
 
-                  {/* <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Number of rooms <span className="text-red-500">*</span></label>
-                    <input type="number" min="10" {...register('totalRooms', { required: 'Number of rooms is required', min: { value: 10, message: 'Minimum 10 rooms' } })} className="w-32 border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#4F2D7F] focus:border-transparent" />
-                    {errors.totalRooms && <span className="text-red-500 text-xs block mt-1">{errors.totalRooms.message}</span>}
-                  </div> */}
+                  <FormCheckbox
+                    label="Accessible room is needed."
+                    name="hasAccessibleRoom"
+                    register={register}
+                  />
 
-                  <div>
-                    <label className="flex items-center space-x-2 text-sm font-medium text-gray-700">
-                      <input type="checkbox" {...register('hasChildren')} className="rounded border-gray-300 text-[#4F2D7F] focus:ring-[#4F2D7F]" />
-                      <span>Travelling/staying with children (2-15 years).</span>
-                    </label>
-                  </div>
-                  <div>
-                    <label className="flex items-center space-x-2 text-sm font-medium text-gray-700">
-                      <input type="checkbox" {...register('hasAccessibleRoom')} className="rounded border-gray-300 text-[#4F2D7F] focus:ring-[#4F2D7F]" />
-                      <span>Accessible room is needed.</span>
-                    </label>
-                  </div>
+                  <RoomSelection
+                    register={register}
+                    setValue={methods.setValue}
+                    watch={watch}
+                  />
 
                   <div className='!mt-10'>
                     <label className="block text-lg font-medium text-gray-700 mb-1">Additional information (optional)</label>
@@ -369,7 +347,7 @@ export default function GroupBookingForm() {
                   </div>
                 </div>
                 <div className="flex justify-end mt-4">
-                  <button type="submit" className="w-full bg-[#00798e] text-white px-6 py-2 rounded">Submit</button>
+                  <button type="submit" className="w-full bg-[#00798e] text-white px-6 py-3 rounded">Submit</button>
                 </div>
               </div>
             </div>
