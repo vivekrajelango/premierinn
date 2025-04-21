@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useForm, FormProvider } from "react-hook-form";
+import { useSelector, useDispatch } from "react-redux";
 import { useTranslations } from 'next-intl';
 import { FormInput } from '@/app/[locale]/components/FormInput';
 import { FormSelect } from '@/app/[locale]/components/FormSelect';
@@ -11,24 +12,9 @@ import { FormCheckbox } from '@/app/[locale]/components/FormCheckbox';
 import { FormDate } from '@/app/[locale]/components/FormDate';
 import { RoomSelection } from '@/app/[locale]/components/RoomSelection';
 import { LanguageSelector } from '@/app/[locale]/components/LanguageSelector';
-
-interface ContactDetails {
-  title: string;
-  firstName: string;
-  lastName: string;
-}
-
-interface BookingDetails {
-  checkIn: string;
-  checkOut: string;
-  location: string;
-}
-
-interface RoomRequirements {
-  totalRooms: number;
-  hasChildren: boolean;
-  notes: string;
-}
+import { getMenuListfromApi } from '@/store/actions';
+import { routePath } from '@/constants/api';
+import { get } from 'lodash';
 
 type FieldName = "title" | "firstName" | "lastName" | "mobile" | "email" | "bookingType" | "stayType" | "hasYouth" | "reason" | "hotelName" | "companyName" | "checkIn" | "checkOut" | "packageType" | "totalRooms" | "hasChildren" | "hasAccessibleRoom" | "notes";
 
@@ -36,8 +22,11 @@ type bookingType = "business" | "personal" | "agent" | "operator";
 
 export default function GroupBookingForm() {
   const t = useTranslations();
+  const dispatch = useDispatch();
   const [openSection, setOpenSection] = useState<string>('contact');
   const sectionOrder = ['contact', 'booking', 'rooms'];
+  const getReasons = useSelector((state: any) => state.user?.getReasonsFromApi);
+  const getReasonsPending = useSelector((state: any) => state.user?.getReasonsPending);
 
   const methods = useForm({
     mode: 'onTouched',
@@ -68,6 +57,7 @@ export default function GroupBookingForm() {
   const { register, handleSubmit, trigger, watch, formState: { errors } } = methods;
 
   const bookingType = watch('bookingType');
+  const totalRooms = watch('singleRooms') + watch('doubleRooms') + watch('twinRooms');
 
   const handleContinue = async (section: string) => {
     let fields: FieldName[] = [];
@@ -85,6 +75,10 @@ export default function GroupBookingForm() {
     // handle final submission
     console.log('Form data:', data);
   };
+
+  useEffect(()=>{
+    dispatch(getMenuListfromApi(routePath.GET_REASONS, ""));
+  },[]);
 
   return (
     <div className="min-h-screen bg-white">
@@ -104,7 +98,6 @@ export default function GroupBookingForm() {
       <main className="container mx-auto px-4 py-8 w-[500px]">
         <h1 className="text-3xl font-bold text-[#4F2D7F] mb-4">{t('header.title')}</h1>
         <p className="text-gray-600 mb-8">{t('header.description')}</p>
-
         <FormProvider {...methods}>
         <form className="max-w-2xl" onSubmit={handleSubmit(onSubmit)}>
           <div className="border overflow-hidden mb-0">
@@ -154,16 +147,28 @@ export default function GroupBookingForm() {
                   />
                   <FormInput
                     label={t('sections.contact.fields.mobile')}
+                    type="tel"
                     name="mobile"
+                    maxLength={10}
+                    minLength={10}
                     required
                     register={register}
+                    pattern={{
+                      value: /^\d{10}$/,
+                      message: "Enter 10 digits"
+                    }}
                     error={errors.mobile}
                   />
                   <FormInput
                     label={t('sections.contact.fields.email')}
+                    type="email"
                     name="email"
                     required
                     register={register}
+                    pattern={{
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                      message: "Invalid email address"
+                    }}
                     error={errors.email}
                   />
                 </div>
@@ -235,13 +240,7 @@ export default function GroupBookingForm() {
                       label={t('sections.booking.fields.visitReason')}
                       name="reason"
                       required
-                      options={[
-                        { value: "mr", label: "Mr" },
-                        { value: "mrs", label: "Mrs" },
-                        { value: "miss", label: "Miss" },
-                        { value: "ms", label: "Ms" },
-                        { value: "dr", label: "Dr" },
-                      ]}
+                      options={getReasons}
                       register={register}
                       error={errors.reason}
                     />

@@ -9,6 +9,12 @@ interface FormInputProps {
     register: any;
     error?: any;
     className?: string;
+    maxLength?:number;
+    minLength?:number;
+    pattern?: {
+        value: RegExp;
+        message: string;
+      };
 }
 
 export const FormInput = ({
@@ -20,6 +26,9 @@ export const FormInput = ({
     register,
     error,
     className = "",
+    minLength,
+    maxLength,
+    pattern
 }: FormInputProps) => {
     return (
         <div className={className}>
@@ -28,7 +37,11 @@ export const FormInput = ({
             </label>
             <input
                 type={type}
-                {...register(name, { required: required && `${label} is required` })}
+                {...register(name, 
+                    { required: required && `${label} is required`, pattern: pattern && pattern }
+                )}
+                minLength={minLength}
+                maxLength={maxLength}
                 placeholder={placeholder}
                 className={`${error ? 'border-red-500 ' : 'border-gray-300'} w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#4F2D7F] focus:border-transparent`}
             />
